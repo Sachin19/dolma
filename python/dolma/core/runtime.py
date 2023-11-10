@@ -23,7 +23,7 @@ from .errors import DolmaFatalError, DolmaRetryableFailure, DolmaShardError
 from .parallel import BaseParallelProcessor, QueueType
 from .paths import delete_dir, join_path, make_relative, mkdir_p, split_glob, split_path
 from .registry import TaggerRegistry
-from .utils import import_modules, make_variable_name
+from .utils import import_modules, make_variable_name, make_variable_name_
 
 # this placeholder gets used when a user has provided no experiment name, and we want to use taggers'
 # names as experiment names.
@@ -195,7 +195,7 @@ def _write_sample_to_streams(
     for tagger_name, tagger_data in samples_collectors.items():
         tagger_output = taggers_paths[tagger_name]
         for tagger_key, tagger_value in tagger_data.items():
-            tagger_key = f"{tagger_output.exp}__{tagger_output.name}__{make_variable_name(tagger_key)}"
+            tagger_key = f"{tagger_output.exp}__{tagger_output.name}__{make_variable_name_(tagger_key)}"
             attributes_by_stream.setdefault(tagger_output.path, {})[tagger_key] = tagger_value
 
     for stream_path, attributes in attributes_by_stream.items():
