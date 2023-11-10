@@ -19,10 +19,10 @@ TaggerOutputDictType: TypeAlias = Dict[str, TaggerOutputType]
 class InputSpec(Struct):
     id: str
     text: str
+    metadata: Dict[str, Any]
     source: str = ""
     version: Optional[str] = None
     # ignoring metadata for now; taggers run on text only
-    # metadata: Optional[Dict[str, Any]] = None
 
 
 class OutputSpec(Struct):
@@ -32,27 +32,28 @@ class OutputSpec(Struct):
 
 
 class Document:
-    __slots__ = "source", "version", "id", "text"
+    __slots__ = "source", "version", "id", "text", "metadata"
 
-    def __init__(self, source: str, id: str, text: str, version: Optional[str] = None) -> None:
+    def __init__(self, source: str, id: str, text: str, metadata: Optional[Dict[str, Any]] = None, version: Optional[str] = None) -> None:
         self.source = source
         self.version = version
         self.id = id
         self.text = text
+        self.metadata = metadata
 
     @classmethod
     def from_spec(cls, spec: InputSpec) -> "Document":
-        return Document(source=spec.source, version=spec.version, id=spec.id, text=spec.text)
+        return Document(source=spec.source, version=spec.version, id=spec.id, text=spec.text, metadata=spec.metadata)
 
     def to_spec(self) -> InputSpec:
-        return InputSpec(source=self.source, version=self.version, id=self.id, text=self.text)
+        return InputSpec(source=self.source, version=self.version, id=self.id, text=self.text, metadata=self.metadata)
 
     @classmethod
     def from_json(cls, d: Dict) -> "Document":
-        return Document(source=d["source"], version=d["version"], id=d["id"], text=d["text"])
+        return Document(source=d["source"], version=d["version"], id=d["id"], text=d["text"], metadata=d['metadata'])
 
     def to_json(self) -> Dict:
-        return {"source": self.source, "version": self.version, "id": self.id, "text": self.text}
+        return {"source": self.source, "version": self.version, "id": self.id, "text": self.text, "metadata": self.metadata}
 
     def __str__(self) -> str:
         attributes_string = ",".join([f"{k}:{repr(v)}" for k, v in self.to_json()])

@@ -85,14 +85,21 @@ def _make_paths_from_prefix(paths: List[str], prefix: str) -> List[str]:
     Note how glob patterns are removed from the paths.
     """
 
+    #print(paths, prefix)
     new_paths: List[str] = []
     prefix_prot, prefix_path = split_path(prefix)
     _, relative_paths = make_relative(paths)
-
+    # print(relative_paths)
+    # print(prefix_path)
+    # print("prot",prefix_prot)
     for curr_path in relative_paths:
+        # print("curr", curr_path)
         base_curr_path, _ = split_glob(curr_path)
+        # print("base_cur")
         new_paths.append(join_path(prefix_prot, prefix_path, base_curr_path))
 
+    # print(new_paths)
+    # input()
     return new_paths
 
 
@@ -387,6 +394,7 @@ def create_and_run_tagger(
     elif experiment is None:
         experiment = EXPERIMENT_PLACEHOLDER_NAME
 
+    #print("yes", join_path(None, destination, experiment), destination)
     if destination is None:
         try:
             destination = _make_paths_from_substitution(documents, "documents", f"attributes/{experiment}")
@@ -394,11 +402,13 @@ def create_and_run_tagger(
             raise RuntimeError("Could not make destination paths from documents paths") from exp
     elif isinstance(destination, str):
         try:
+            # print("hello", join_path(None, destination, experiment))
             destination = _make_paths_from_prefix(documents, join_path(None, destination, experiment))
         except Exception as exp:
             raise RuntimeError(f"Could not make destination paths from prefix {destination}") from exp
 
     metadata = metadata or tempfile.mkdtemp()
+    # print("meta", documents, metadata)
     if isinstance(metadata, str):
         try:
             metadata = _make_paths_from_prefix(documents, metadata)

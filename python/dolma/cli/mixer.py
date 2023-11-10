@@ -115,6 +115,7 @@ class MixerCli(BaseCli):
                 stream_config_dict["name"] = stream_config.name
                 stream_config_dict["documents"] = [str(d) for d in stream_config.documents]
                 stream_config_dict["attributes"] = [str(a) for a in list(stream_config.attributes)]
+                print(stream_config_dict['attributes'])
                 stream_config_dict["output"] = {
                     "path": str(stream_config.output.path),
                     "max_size_in_bytes": int(stream_config.output.max_size_in_bytes),

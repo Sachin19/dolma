@@ -49,9 +49,9 @@ impl Shard {
                 .map(|(input, size)| {
                     let mut attr_paths = Vec::new();
                     for prefix in stream_config.attributes.iter() {
-                        let attr_prefix = format!("/attributes/{}/", prefix);
-                        let attr_path = input.replace("/documents/", &attr_prefix);
-                        attr_paths.push(attr_path);
+                        let attr_prefix = format!("{}", prefix);
+                        // let attr_path = input.replace("/documents/", &attr_prefix);
+                        attr_paths.push(attr_prefix);
                     }
                     (
                         DocumentPaths {

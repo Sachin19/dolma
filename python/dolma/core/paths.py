@@ -79,7 +79,9 @@ def _pathify(path: Union[Path, str]) -> Tuple[str, Path]:
     Return the protocol and path of a given path.
     """
     path = _escape_glob(str(path))
+    # print(path)
     parsed = urlparse(path)
+    # print(parsed)
     path = Path(f"{parsed.netloc}/{parsed.path}") if parsed.netloc else Path(parsed.path)
     return parsed.scheme, path
 
@@ -157,6 +159,7 @@ def split_path(path: str) -> Tuple[str, Tuple[str, ...]]:
     Split a path into its protocol and path components.
     """
     protocol, _path = _pathify(path)
+    # print(f"<<{protocol}>>", _path)
     return protocol, tuple(_unescape_glob(p) for p in _path.parts)
 
 
@@ -281,6 +284,7 @@ def make_relative(paths: List[str]) -> Tuple[str, List[str]]:
         common_path = f"{common_prot}://" if common_prot else ""
         relative_paths = [_unpathify("", _pathify(path)[1]) for path in paths]
 
+    # print("relative", common_path, relative_paths)
     return common_path, relative_paths
 
 
@@ -304,9 +308,15 @@ def split_glob(path: str) -> Tuple[str, str]:
         return "", path
 
     protocol, parts = split_path(path)
+    # print("propt", protocol)
+    # print(parts)
 
     i = min(i for i, c in enumerate(parts) if is_glob(c))
-
-    path = join_path(protocol, *parts[:i])
-    rest = join_path("", *parts[i:])
+    # print(*parts[:i])
+    path = ""
+    rest = ""
+    if len(parts[:i]) > 0 and len(protocol)> 0:
+        path = join_path(protocol, *parts[:i])
+    if len(parts[i:]) > 0:
+        rest = join_path("", *parts[i:])
     return path, rest
