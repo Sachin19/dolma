@@ -6,7 +6,7 @@ Data types assumed by Filters.
 
 """
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from msgspec import Struct
 from typing_extensions import TypeAlias
@@ -22,7 +22,7 @@ class InputSpec(Struct):
     metadata: Dict[str, Any]
     source: str = ""
     version: Optional[str] = None
-    created: str = None
+    created: Union[str, int] = None
     # ignoring metadata for now; taggers run on text only
 
 
@@ -35,7 +35,7 @@ class OutputSpec(Struct):
 class Document:
     __slots__ = "source", "version", "id", "text", "metadata", "created"
 
-    def __init__(self, source: str, id: str, text: str, metadata: Optional[Dict[str, Any]] = None, version: Optional[str] = None, created: Optional[str] = None) -> None:
+    def __init__(self, source: str, id: str, text: str, metadata: Optional[Dict[str, Any]] = None, version: Optional[str] = None, created: Optional[Union[str, int]] = None) -> None:
         self.source = source
         self.version = version
         self.id = id
