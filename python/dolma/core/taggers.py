@@ -37,7 +37,7 @@ class BaseTagger:
 
     def tag(self, row: InputSpec) -> TaggerOutputDictType:
         """Internal function that is used by the tagger to get data"""
-        doc = Document(source=row.source, version=row.version, id=row.id, text=row.text, metadata=row.metadata)
+        doc = Document(source=row.source, version=row.version, id=row.id, text=row.text, metadata=row.metadata, created=row.created)
         doc_result = self.predict(doc)
 
         tagger_output: TaggerOutputDictType = {field: [] for field in self.defaults}
